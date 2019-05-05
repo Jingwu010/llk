@@ -12,4 +12,12 @@ public class EmptyCell extends Cell {
   public String toString() {
     return "E";
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof CardCell)) return false;
+    CardCell that = (CardCell) o;
+    return toString().equals(that.toString());
+  }
 }

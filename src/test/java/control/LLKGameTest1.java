@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Created by Jingwu Xu on 2019-05-03
  */
-public class LLKGameTest implements Observer {
+public class LLKGameTest1 implements Observer {
   static LLKGame game;
   String updatedMessage = null;
 
@@ -168,8 +168,8 @@ public class LLKGameTest implements Observer {
     game.getBlockAtPos(row1,col1).addObserver(this);
     game.getBlockAtPos(row2,col2).addObserver(this);
     CardCell cc = (CardCell)  game.getBlockAtPos(row1, col1).getCell();
-    game.setSelected(row1, col1);
-    game.setSelected(row2, col2);
+    game.setSelectedBlock(row1, col1);
+    game.setSelectedBlock(row2, col2);
     return cc;
   }
 

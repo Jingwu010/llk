@@ -15,7 +15,7 @@ public class Block extends Observable {
     this.col = col;
   }
 
-  public void fill(Cell cell) {
+  public void setCell(Cell cell) {
     this.cell = cell;
     setChanged();
     notifyObservers(cell.toString());
@@ -43,10 +43,6 @@ public class Block extends Observable {
     if (!(obj instanceof Block)) return false;
     Block that = (Block) obj;
     return row == that.row && col == that.col;
-  }
-
-  public void changeCell(Cell newCell) {
-    cell = newCell;
   }
 
   public Cell getCell() {

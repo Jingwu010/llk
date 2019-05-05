@@ -16,16 +16,21 @@ public class LLKGame extends Observable{
 
   Block selected = null;
 
+  List<Block> availablePath;
+
+  int num_shuffles = 5;
+
+  int num_hints = 5+1;
+
   public LLKGame() {
     this(Level.A);
   }
 
   public LLKGame(Level lv) {
     newGame(lv);
-  }
+    availablePath = new ArrayList<>();
 
-  private void newGame(Level lv) {
-    this.board = new Board(lv.getRows(), lv.getColumns(), lv.getComplexity());
+    updateConnectablePath();
   }
 
   public void next() {
@@ -33,27 +38,19 @@ public class LLKGame extends Observable{
     newGame(lv);
   }
 
-  public Board getBoard() {
-    return board;
-  }
-
-  public Level getLv() {
-    return lv;
-  }
-
   public Block getBlockAtPos(int row, int col) {
     return board.getBlockAtPos(row, col);
   }
 
   public int getRows() {
-    return board.getN();
+    return board.getRow();
   }
 
   public int getColumns() {
-    return board.getM();
+    return board.getCol();
   }
 
-  public void setSelected(int row, int col) {
+  public void setSelectedBlock(int row, int col) {
     if (selected == null) {
       selected = board.getBlockAtPos(row, col);
       return;
@@ -65,31 +62,113 @@ public class LLKGame extends Observable{
       setChanged();
       notifyObservers(packPathJsonString(path));
 
-      board.getBlockAtPos(selected.getRow(), selected.getCol()).fill(Board.ec);
-      board.getBlockAtPos(clicked.getRow(), clicked.getCol()).fill(Board.ec);
+      board.getBlockAtPos(selected.getRow(), selected.getCol()).setCell(Board.ec);
+      board.getBlockAtPos(clicked.getRow(), clicked.getCol()).setCell(Board.ec);
       // System.out.println("A MATCH!");
       selected = null;
+
+      postMoveSteps();
     } else {
       // System.out.println("MISMATCH!");
       selected = clicked;
     }
   }
 
-  /**
-   * {
-   *   "IDENTIFIER" : "PATH"
-   *   "DATA" : [
-   *      {
-   *        "ROW"   :
-   *        "COL"   :
-   *        "LABEL" :
-   *      }, ...
-   *   ]
-   * }
-   * @param path
-   * @return
-   */
-  private String packPathJsonString(List<Block> path) {
+  public void hintAvailablePath() {
+    if (num_hints < 0) return;
+    num_hints -= 1;
+
+    updateConnectablePath();
+
+    setChanged();
+    notifyObservers(packPathJsonString(availablePath));
+  }
+
+  private void postMoveSteps() {
+    updateConnectablePath();
+  }
+
+  private void updateConnectablePath() {
+    // System.out.println("findAnyConnectable() " + findAnyConnectable());
+    // System.out.println("availablePath" + packPathJsonString(availablePath));
+    while (!findAnyConnectable() && num_shuffles > 0) {
+      // System.out.println("shuffle board");
+      shuffleBoard();
+    }
+  }
+
+  public boolean shuffleBoard() {
+    if (num_shuffles < 0) return false;
+    num_shuffles -= 1;
+    List<Block> bList = new ArrayList<>();
+    for (int i=0; i<board.getRow(); i++)
+      for (int j=0; j<board.getCol(); j++) {
+        Block curr = board.getBlockAtPos(i, j);
+        if (!(curr.getCell() instanceof CardCell)) continue;
+        bList.add(curr);
+      }
+
+    Random rgen = new Random();
+    for (int i=0; i<bList.size(); i++) {
+      int randomPosition = rgen.nextInt(bList.size());
+      Cell temp = bList.get(i).getCell();
+      bList.get(i).setCell(bList.get(randomPosition).getCell());
+      bList.get(randomPosition).setCell(temp);
+    }
+    return true;
+  }
+
+  private boolean findAnyConnectable() {
+    // System.out.println("findAnyConnectable");
+    if (checkPathValid(availablePath)) return true;
+    availablePath.clear();
+    for (int i1=0; i1<board.getRow(); i1++)
+      for (int j1=0; j1<board.getCol(); j1++) {
+        Block block1 = board.getBlockAtPos(i1, j1);
+        if (block1.getCell() instanceof EmptyCell) continue;
+        // System.out.println();
+        for (int i2=0; i2<board.getRow(); i2++)
+          for (int j2=0; j2<board.getCol(); j2++) {
+            if (i1==i2 && j1==j2) continue;
+            Block block2 = board.getBlockAtPos(i2, j2);
+            // System.out.println("Checking " + block1 + " " + block1.getRow() + ":" + block1.getCol() + "   " + block1.getCell().getClass());
+            // System.out.println("Checking " + block2 + " " + block2.getRow() + ":" + block2.getCol() + "   " + block2.getCell().getClass());
+            // System.out.print(block1.getCell().equals(block2.getCell()));
+            // System.out.print("   ");
+            // System.out.print(block1.getCell().toString().equals(block2.getCell().toString()));
+            // System.out.print("\n");
+            if (block1.getCell().equals(block2.getCell())) {
+              List<Block> path = new ArrayList<>();
+              if (checkConnectable(block1, block2, path)) {
+                availablePath.addAll(path);
+                return true;
+              }
+            }
+          }
+      }
+    return false;
+  }
+
+  private boolean checkPathValid(List<Block> path) {
+    // The path we find is already valid before
+    // all we need to check is whether two blocks have been cleared
+    if (path.isEmpty()) return false;
+
+    Block end = path.get(0);
+    Block start = path.get(path.size()-1);
+    // System.out.println("Checking two blocks "+ start + " AND " + end);
+    if (!start.getCell().equals(end.getCell())) return false;
+    // Maybe wrong here
+    if (start.getCell() instanceof EmptyCell) return false;
+
+    return true;
+  }
+
+  private void newGame(Level lv) {
+    this.board = new Board(lv.getRows(), lv.getColumns(), lv.getComplexity());
+  }
+
+  private static String packPathJsonString(List<Block> path) {
     JSONObject jsonObj = new JSONObject();
     jsonObj.put("IDENTIFIER", "PATH");
     JSONArray jsonArr = new JSONArray();
@@ -173,8 +252,8 @@ public class LLKGame extends Observable{
         int nextRow = start.getRow() + dir.drow*i;
         int nextCol = start.getCol() + dir.dcol*i;
 
-        if (nextRow >= board.getN() || nextRow < 0) break;
-        if (nextCol >= board.getM() || nextCol < 0) break;
+        if (nextRow >= board.getRow() || nextRow < 0) break;
+        if (nextCol >= board.getCol() || nextCol < 0) break;
 
         Block nextBlock = board.getBlockAtPos(nextRow, nextCol);
         if (nextBlock.equals(end)) {

@@ -7,4 +7,6 @@ public abstract class Cell {
   public abstract boolean walkable(Direction d);
 
   public abstract String toString();
+
+  public abstract boolean equals(Object o);
 }

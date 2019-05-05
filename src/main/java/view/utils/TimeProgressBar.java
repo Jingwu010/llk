@@ -24,7 +24,6 @@ public class TimeProgressBar extends ProgressBar implements Runnable {
         e.printStackTrace();
       }
       time_remaining -= 1;
-      System.out.println("Time Remaining:" + time_remaining);
       updateProgress();
     }
     // [TODO] time runs out

@@ -32,12 +32,12 @@ public class Board {
 
     // init four sides empty cells
     for (int j = 0; j < m; j++) {
-      board[0][j].fill(ec);
-      board[n-1][j].fill(ec);
+      board[0][j].setCell(ec);
+      board[n-1][j].setCell(ec);
     }
     for (int i = 0; i < n; i++) {
-      board[i][0].fill(ec);
-      board[i][m-1].fill(ec);
+      board[i][0].setCell(ec);
+      board[i][m-1].setCell(ec);
     }
 
     // init middle puzzle cells
@@ -48,7 +48,7 @@ public class Board {
       for (int j = 1; j < m-1; j++) {
         CardCell cc = new CardCell(cards[k]);
         k += 1;
-        board[i][j].fill(cc);
+        board[i][j].setCell(cc);
       }
     }
   }
@@ -110,22 +110,24 @@ public class Board {
   }
 
   public Block getBlockAtPos(int row, int col) {
+    if (row >= n || row < 0) return null;
+    if (col >= m || col < 0) return null;
     return board[row][col];
   }
 
-  public int getN() {
+  public int getRow() {
     return n;
   }
 
-  public int getM() {
+  public int getCol() {
     return m;
   }
 
-  public int getC() {
+  public int getComplexity() {
     return c;
   }
 
   public void setBoardCellAtPos(Cell cell, int row, int col) {
-    board[row][col].changeCell(cell);
+    board[row][col].setCell(cell);
   }
 }

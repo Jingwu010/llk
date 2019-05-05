@@ -20,11 +20,12 @@ public class CellButton extends Button implements Observer {
   LLKGame game;
 
   public CellButton(LLKGame game, int row, int col) {
-    super(game.getBlockAtPos(row, col).toString());
-    this.label = game.getBlockAtPos(row, col).toString();
+    super();
+
     this.row = row;
     this.col = col;
     this.game = game;
+    updateLabel();
 
     if (label.equals("E")) {
       setDisable(true);
@@ -38,16 +39,25 @@ public class CellButton extends Button implements Observer {
     setClickable();
   }
 
+  public void updateLabel() {
+    // System.out.println("label " + label);
+    label = game.getBlockAtPos(row, col).toString();
+    if (!label.equals("E"))
+      setText(label);
+  }
+
   private void setClickable() {
     setOnAction(event -> {
       System.out.println("clicked " + row + " " + col);
-        game.setSelected(row, col);
+        game.setSelectedBlock(row, col);
     });
   }
 
   @Override
   public void update(Observable o, Object arg) {
     label = arg.toString();
+
+    updateLabel();
     if (label.equals("E")) {
       FadeTransition fadeout = new FadeTransition();
       fadeout.setNode(this);
