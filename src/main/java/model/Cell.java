@@ -9,4 +9,8 @@ public abstract class Cell {
   public abstract String toString();
 
   public abstract boolean equals(Object o);
+
+  public String label() {
+    return toString();
+  }
 }

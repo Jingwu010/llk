@@ -19,10 +19,10 @@ class LevelDetail {
 
 public enum Level {
   T(new LevelDetail(6, 6, 1,"Test")),
-  A(new LevelDetail(10, 12, 20,"Beginner")),
+  A(new LevelDetail(10, 14, 20,"Beginner")),
   B(new LevelDetail(10, 14, 24,"Easy")),
   C(new LevelDetail(10, 14, 32,"Normal")),
-  D(new LevelDetail(10, 16, 32,"Hard"));
+  D(new LevelDetail(10, 14, 32,"Hard"));
 
   private LevelDetail ld;
 
@@ -59,5 +59,11 @@ public enum Level {
       default:
         return T;
     }
+  }
+
+  public static void main(String[] agrs) {
+    Level lv = Level.T;
+    lv = lv.next();
+    System.out.println(lv);
   }
 }

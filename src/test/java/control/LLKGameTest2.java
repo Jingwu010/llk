@@ -28,7 +28,7 @@ class LLKGameTest2 implements Observer {
         CardCell cc = new CardCell(k++);
         game.board.setBoardCellAtPos(cc, i, j);
       }
-    game.addObserver(this);
+    game.mbus.addObserver(this);
     updatedMessage = null;
   }
 
@@ -92,7 +92,6 @@ class LLKGameTest2 implements Observer {
 
   @Override
   public void update(Observable o, Object arg) {
-    if (o instanceof LLKGame)
-      updatedMessage = arg.toString();
+    return;
   }
 }

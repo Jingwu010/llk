@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Observable;
 import java.util.Observer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Created by Jingwu Xu on 2019-05-05
@@ -39,7 +39,7 @@ class LLKGameTest3 implements Observer {
 
   @BeforeEach
   public void init() {
-    game.addObserver(this);
+    game.mbus.addObserver(this);
     game.selected = null;
     updatedMessage = null;
   }
@@ -72,7 +72,6 @@ class LLKGameTest3 implements Observer {
 
   @Override
   public void update(Observable o, Object arg) {
-    if (o instanceof LLKGame)
-      updatedMessage = arg.toString();
+    return;
   }
 }

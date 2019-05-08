@@ -1,6 +1,7 @@
 package view.layouts;
 
 import control.LLKGame;
+import control.MessageIdentifier;
 import javafx.animation.FadeTransition;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
@@ -24,19 +25,19 @@ public class LinePane extends Pane implements Observer {
     super();
     this.game = game;
 
-    this.game.addObserver(this);
-
+    this.game.mbus.addObserver(this);
   }
 
   @Override
   public void update(Observable o, Object arg) {
-    System.out.println("LINE PANE GET UPDATED " + arg.toString());
+    JSONObject jsonObj = new JSONObject(arg.toString());
+    if (!jsonObj.getString("IDENTIFIER").equals(MessageIdentifier.PATH.toString()))
+      return;
     getChildren().clear();
-    handlePathUpdate(arg.toString());
+    handlePathUpdate(jsonObj);
   }
 
-  private void handlePathUpdate(String message) {
-    JSONObject jsonObj = new JSONObject(message);
+  private void handlePathUpdate(JSONObject jsonObj) {
     List<CellButton> btns = new ArrayList<>();
     JSONArray jsonArray = jsonObj.getJSONArray("DATA");
     for (int i=0; i<jsonArray.length(); i++) {

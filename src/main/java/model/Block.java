@@ -1,11 +1,9 @@
 package model;
 
-import java.util.Observable;
-
 /**
  * Created by Jingwu Xu on 2019-05-02
  */
-public class Block extends Observable {
+public class Block {
   int row;
   int col;
   Cell cell;
@@ -17,8 +15,6 @@ public class Block extends Observable {
 
   public void setCell(Cell cell) {
     this.cell = cell;
-    setChanged();
-    notifyObservers(cell.toString());
   }
 
   public String toString() {

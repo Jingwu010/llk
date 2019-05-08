@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -25,6 +26,30 @@ public class Board {
     this.initBoard();
   }
 
+  public Iterable<Block> iterable() {
+    Iterable<Block> iterable = () -> new Iterator<Block>() {
+			private int row = 0;
+			private int col = 0;
+
+			@Override
+			public boolean hasNext() {
+			  // System.out.println(row + " " + col);
+				return n > row && m > col;
+			}
+
+			@Override
+			public Block next() {
+				Block block = board[row][col];
+				col += 1;
+				if (m <= col) {
+          row += 1;
+          col = 0;
+        }
+				return block;
+			}
+		};
+    return iterable;
+  }
   private void initBoard() {
     for (int i = 0; i < n; i++)
       for (int j = 0; j < m; j++)
@@ -104,11 +129,6 @@ public class Board {
     }
   }
 
-	public static void main(String[] args) {
-    Board board =  new Board(Level.C.getRows(), Level.C.getColumns(), Level.C.getComplexity());
-    board.printBoard();
-  }
-
   public Block getBlockAtPos(int row, int col) {
     if (row >= n || row < 0) return null;
     if (col >= m || col < 0) return null;
@@ -129,5 +149,19 @@ public class Board {
 
   public void setBoardCellAtPos(Cell cell, int row, int col) {
     board[row][col].setCell(cell);
+  }
+
+  public static void main(String[] args) {
+    Board board = new Board();
+    System.out.println();
+    int i = 0;
+    for (Block b : board.iterable()) {
+      if (i == board.m) {
+        System.out.println();
+        i = 0;
+      }
+      System.out.format("%3s", b);
+      i+=1;
+    }
   }
 }

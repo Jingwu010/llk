@@ -7,12 +7,12 @@ import javafx.scene.text.Text;
 /**
  * Created by Jingwu Xu on 2019-05-02
  */
-public class MainBorderPane extends BorderPane {
-  public MainBorderPane(Node center, Node top, Node bot) {
+public class MainGamePane extends BorderPane {
+  public MainGamePane(Node center, Node top, Node bot) {
     this(center, top, new Text(), bot, new Text());
   }
 
-  public MainBorderPane(Node center, Node top, Node right, Node bottom, Node left) {
+  public MainGamePane(Node center, Node top, Node right, Node bottom, Node left) {
     super(center, top, right, bottom, left);
   }
 }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Observable;
 import java.util.Observer;
 
+import static control.LLKGame.packBlockInfo;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -40,7 +41,7 @@ public class LLKGameTest1 implements Observer {
 
   @BeforeEach
   public void init() {
-    game.addObserver(this);
+    game.mbus.addObserver(this);
     game.selected = null;
     updatedMessage = null;
   }
@@ -152,7 +153,7 @@ public class LLKGameTest1 implements Observer {
   private void setSelectedCommonCheck(JSONObject jsonObj, int row1, int col1, int row2, int col2) {
     // Check Message Received
     assertNotNull(updatedMessage);
-    // Check Correct Header
+    // Check Correct IDENTIFIER
     assertEquals(jsonObj.get("IDENTIFIER"), "PATH");
     // Check Valid Path Length
     assertTrue((jsonObj.getJSONArray("DATA")).length() <= 4);
@@ -165,19 +166,21 @@ public class LLKGameTest1 implements Observer {
   }
 
   private CardCell select(int row1, int col1, int row2, int col2) {
-    game.getBlockAtPos(row1,col1).addObserver(this);
-    game.getBlockAtPos(row2,col2).addObserver(this);
+    // game.getBlockAtPos(row1,col1).addObserver(this);
+    // game.getBlockAtPos(row2,col2).addObserver(this);
     CardCell cc = (CardCell)  game.getBlockAtPos(row1, col1).getCell();
     game.setSelectedBlock(row1, col1);
     game.setSelectedBlock(row2, col2);
+
+    game.mbus.setMessageType(MessageType.DELETE);
+    game.mbus.sendMessage(packBlockInfo(game.board.getBlockAtPos(row1, col1)));
+    game.mbus.sendMessage(packBlockInfo(game.board.getBlockAtPos(row2, col2)));
     return cc;
   }
 
   private void deSelect(int row1, int col1, int row2, int col2, CardCell cc) {
     game.board.setBoardCellAtPos(cc, row1, col1);
     game.board.setBoardCellAtPos(cc, row2, col2);
-    game.getBlockAtPos(row1,col1).deleteObserver(this);
-    game.getBlockAtPos(row2,col2).deleteObserver(this);
   }
 
   private int getPathTurnings(JSONArray jsonArray) {
@@ -237,7 +240,9 @@ public class LLKGameTest1 implements Observer {
   }
   @Override
   public void update(Observable o, Object arg) {
-    if (o instanceof LLKGame)
-      updatedMessage = arg.toString();
+    JSONObject jsonObj = new JSONObject(arg.toString());
+    if (!jsonObj.getString("IDENTIFIER").equals("PATH"))
+      return;
+    updatedMessage = arg.toString();
   }
 }
