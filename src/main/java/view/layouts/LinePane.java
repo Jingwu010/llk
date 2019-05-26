@@ -5,6 +5,7 @@ import control.MessageIdentifier;
 import javafx.animation.FadeTransition;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import org.json.JSONArray;
@@ -67,7 +68,8 @@ public class LinePane extends Pane implements Observer {
 
   private void drawLine(double startX, double startY, double endX, double endY) {
     Line line = new Line(startX, startY, endX, endY);
-    line.setStrokeWidth(2);
+    line.setStrokeWidth(3);
+    line.setStroke(Color.rgb(0,0,0,1));
 
     addTransition(line);
 

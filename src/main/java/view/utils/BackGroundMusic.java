@@ -8,8 +8,8 @@ import javafx.scene.media.AudioClip;
 public class BackGroundMusic {
   static AudioClip bgm;
   public BackGroundMusic() {
-    bgm = new AudioClip("file:src/main/resources/bgm.wav");
-    bgm.setVolume(0.5);
+    bgm = new AudioClip("file:src/main/resources/sounds/bg1.m4a");
+    bgm.setVolume(0.7);
     bgm.setCycleCount(AudioClip.INDEFINITE);
   }
 

@@ -19,6 +19,8 @@ class LevelDetail {
 
 public enum Level {
   T(new LevelDetail(6, 6, 1,"Test")),
+  T1(new LevelDetail(6, 6, 1,"Test")),
+  T2(new LevelDetail(6, 6, 2,"Test")),
   A(new LevelDetail(10, 14, 20,"Beginner")),
   B(new LevelDetail(10, 14, 24,"Easy")),
   C(new LevelDetail(10, 14, 32,"Normal")),
@@ -48,6 +50,10 @@ public enum Level {
 
   public Level next() {
     switch (this) {
+      case T1:
+        return T2;
+      case T2:
+        return T1;
       case A:
         return B;
       case B:

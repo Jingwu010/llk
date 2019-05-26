@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class GameTimeController{
   private final LLKGame game;
 
-  final static double time_size = 120;
+  final static double time_size = 180;
   final static int match_time_bonus = 3;
 
 

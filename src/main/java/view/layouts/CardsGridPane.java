@@ -6,6 +6,7 @@ import control.MessageType;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import org.json.JSONObject;
+import view.utils.BackGroundIcons;
 import view.utils.CellButton;
 
 import java.util.Observable;
@@ -22,6 +23,7 @@ public class CardsGridPane extends GridPane implements Observer {
   public CardsGridPane(LLKGame game, int nrow, int ncol) {
     super();
     setPadding(new Insets(vPadding, hPadding, vPadding, hPadding));
+    new BackGroundIcons(CellButton.WIDTH-15, CellButton.HEIGHT-15);
     btns = new CellButton[nrow][ncol];
     for (int i = 0; i < nrow; i++) {
         for (int j = 0; j < ncol; j++) {
@@ -30,7 +32,6 @@ public class CardsGridPane extends GridPane implements Observer {
             add(btn, j, i);
         }
     }
-
     game.mbus.addObserver(this);
   }
 
@@ -56,9 +57,7 @@ public class CardsGridPane extends GridPane implements Observer {
         break;
 
     }
-
-
-    // btns[row][col].fadeOut();
+    this.requestFocus();
   }
 }
 

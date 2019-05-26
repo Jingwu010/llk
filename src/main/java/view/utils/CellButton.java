@@ -3,14 +3,16 @@ package view.utils;
 import control.LLKGame;
 import javafx.animation.FadeTransition;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 /**
  * Created by Jingwu Xu on 2019-05-02
  */
 public class CellButton extends Button {
-  public static final int WIDTH = 40;
-  public static final int HEIGHT = 40;
+  public static final int WIDTH = 50;
+  public static final int HEIGHT = 50;
   int row;
   int col;
   String label;
@@ -31,6 +33,18 @@ public class CellButton extends Button {
     setMinHeight(HEIGHT);
     setLayoutY(HEIGHT*col);
     setClickable();
+    setStyle("-fx-background-radius: 0");
+
+    if (!this.label.equals("E")) {
+      DropShadow e = new DropShadow();
+      e.setColor(Color.rgb(252, 164, 179, 0.8));
+      e.setWidth(5);
+      e.setHeight(3);
+      e.setOffsetX(3);
+      e.setOffsetY(5);
+      e.setRadius(0);
+      setEffect(e);
+    }
   }
 
   public void newButton(String label) {
@@ -47,7 +61,11 @@ public class CellButton extends Button {
 
   public void updateLabel(String label) {
     this.label = label;
-    setText(label);
+    // setText(label);
+    if (this.label.equals("E")) return;
+
+    int id = Integer.valueOf(this.label) + 1;
+    setGraphic(BackGroundIcons.getImageView(id));
   }
 
   public void fadeOut() {

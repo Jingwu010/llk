@@ -67,7 +67,6 @@ public class Board {
 
     // init middle puzzle cells
     int[] cards = initCards();
-    System.out.println(cards.length);
     int k = 0;
     for (int i = 1; i < n-1; i++){
       for (int j = 1; j < m-1; j++) {
@@ -109,7 +108,7 @@ public class Board {
   }
 
   private static int[] RandomizeArray(int[] array){
-		Random rgen = new Random();  // Random number generator
+    Random rgen = new Random();  // Random number generator
 
 		for (int i=0; i<array.length; i++) {
 		    int randomPosition = rgen.nextInt(array.length);

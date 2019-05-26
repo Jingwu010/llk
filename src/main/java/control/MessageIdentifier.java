@@ -10,7 +10,11 @@ public enum MessageIdentifier {
   // put a new path to display at view
   PATH,
   // update timer
-  TIMER;
+  TIMER,
+  // buttons
+  BUTTON,
+  // New game
+  NEXT;
 
   @Override
   public String toString() {
@@ -21,6 +25,10 @@ public enum MessageIdentifier {
         return "PATH";
       case TIMER:
         return "TIMER";
+      case BUTTON:
+        return "BUTTON";
+      case NEXT:
+        return "NEXT";
       default:
         return "NONE";
     }
@@ -32,8 +40,12 @@ public enum MessageIdentifier {
         return BLOCK;
       case "PATH":
         return PATH;
-        case "TIMER":
+      case "TIMER":
         return TIMER;
+      case "BUTTON":
+        return BUTTON;
+      case "NEXT":
+        return NEXT;
       default:
         return NONE;
     }

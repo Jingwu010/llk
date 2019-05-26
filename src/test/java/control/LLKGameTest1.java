@@ -140,6 +140,27 @@ public class LLKGameTest1 implements Observer {
   }
 
   @Test
+  public void testSetSelected8() {
+    System.out.println();
+    EmptyCell ec = new EmptyCell();
+    game.board.setBoardCellAtPos(ec, 3, 6);
+
+    int row1 = 1, col1 = 4;
+    int row2 = 2, col2 = 6;
+    CardCell cc = select(row1, col1, row2, col2);
+    JSONObject jsonObj = new JSONObject(updatedMessage);
+    deSelect(row1, col1, row2, col2, cc);
+
+    // Common Assertion Check
+    setSelectedCommonCheck(jsonObj, row1, col1, row2, col2);
+    assertTrue(getPathTurnings(jsonObj.getJSONArray("DATA")) != 1);
+    // System.out.println(jsonObj.toString());
+
+    CardCell cc0 = new CardCell(0);
+    game.board.setBoardCellAtPos(cc0, 3, 6);
+  }
+
+  @Test
   public void testFalseSetSelected() {
     int row1 = 2, col1 = 2;
     int row2 = 2, col2 = 3;

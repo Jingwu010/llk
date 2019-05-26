@@ -7,23 +7,18 @@ import java.util.Observable;
 /**
  * Created by Jingwu Xu on 2019-05-06
  */
-public class MessageBus extends Observable {
+public class MessageBus extends Observable{
   public static final String HEADER = "Message";
   private MessageType mtype;
+  private boolean suspended;
 
   public void setMessageType(MessageType etype){
     this.mtype = etype;
+    this.suspended = true;
   }
 
   public void sendMessage(String message) {
     JSONObject jsonObj = new JSONObject(message);
-    addHeader(jsonObj);
-    setChanged();
-    notifyObservers(jsonObj.toString());
-  }
-
-  public void sendMessage() {
-    JSONObject jsonObj = new JSONObject();
     addHeader(jsonObj);
     setChanged();
     notifyObservers(jsonObj.toString());

@@ -1,7 +1,8 @@
 package view.layouts;
 
 import control.LLKGame;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import view.events.EventBus;
 
 /**
@@ -22,11 +23,14 @@ public class MainStackPane extends StackPane {
     BottomBox botbox = new BottomBox();
     MainGamePane mbp = new MainGamePane(stackPane, topbox, botbox);
 
-    CoverPane cp = new CoverPane(game, ebus);
+    CoverPane cp = new CoverPane(this, game, ebus);
     ebus.addObserver(cp);
 
     getChildren().add(mbp);
-    getChildren().add(cp);
-  }
+    // getChildren().add(cp);
 
+    setBackground(new Background(new BackgroundImage(
+        new Image("file:src/main/resources/pngs/map.png"),
+        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+  }
 }
